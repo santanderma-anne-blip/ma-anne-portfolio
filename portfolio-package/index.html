@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma-anne — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F0A19;
+    --bg-soft:#160f28;
+    --surface:#1e1433;
+    --surface-2:#271a45;
+
+    --line:rgba(168,85,247,.20);
+
+    --accent:#A855F7;
+    --accent-2:#7C3AED;
+    --accent-soft:#C084FC;
+
+    --text:#F5F1FF;
+    --text-dim:#b6a3d9;
+    --text-faint:#7d6b9c;
+
+    --gold:#e8c37a;
+    --gold-2:#c99a3f;
+    --gold-line:rgba(232,195,122,.35);
+
+    --radius:18px;
+}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;line-height:1.05;}
+  .container{max-width:1120px;margin:0 auto;padding:0 32px;}
+
+  /* ---------- Aurora background ---------- */
+  .aurora{
+    position:fixed;inset:0;z-index:-1;
+    background:var(--bg);
+    overflow:hidden;
+  }
+  .aurora::before, .aurora::after{
+    content:"";
+    position:absolute;
+    width:60vw;height:60vw;
+    border-radius:50%;
+    filter:blur(120px);
+    opacity:0.35;
+  }
+  .aurora::before{
+    background:radial-gradient(circle, var(--accent-2), transparent 70%);
+    top:-20%;left:-10%;
+    animation:drift1 22s ease-in-out infinite;
+  }
+  .aurora::after{
+    background:radial-gradient(circle, var(--accent), transparent 70%);
+    bottom:-25%;right:-10%;
+    animation:drift2 26s ease-in-out infinite;
+  }
+  @keyframes drift1{
+    0%,100%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(6%,8%) scale(1.1);}
+  }
+  @keyframes drift2{
+    0%,100%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(-6%,-6%) scale(1.15);}
+  }
+  .grain{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;
+    opacity:0.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .glow-cursor{
+    position:fixed;
+    width:420px;height:420px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(168,85,247,0.12), transparent 70%);
+    pointer-events:none;
+    transform:translate(-50%,-50%);
+    z-index:0;
+    transition:opacity 0.3s;
+  }
+
+  /* ---------- Nav ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(14px);
+    background:rgba(18,9,32,0.7);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 32px;max-width:1120px;margin:0 auto;
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Fraunces',serif;font-style:italic;font-size:1.15rem;
+  }
+  .logo-mark{
+    width:30px;height:30px;border-radius:8px;
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Inter',sans-serif;font-style:normal;font-weight:600;font-size:0.85rem;
+    color:#120920;
+  }
+  .nav-links{display:flex;gap:36px;align-items:center;}
+  .nav-links a{
+    font-size:0.92rem;color:var(--text-dim);
+    transition:color 0.2s;
+  }
+  .nav-links a:hover{color:var(--text);}
+  .nav-linkedin{
+    width:32px;height:32px;border-radius:50%;
+    background:var(--surface);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Inter',sans-serif;font-weight:700;font-size:0.8rem;
+    color:var(--accent)!important;
+    transition:all 0.25s;
+  }
+  .nav-linkedin:hover{
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    color:#150a26!important;
+    transform:translateY(-2px);
+  }
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 22px;
+    border-radius:999px;
+    font-size:0.88rem;font-weight:500;
+    border:1px solid var(--line);
+    transition:all 0.25s;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    color:#150a26;border:none;
+  }
+  .btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);}
+  .btn-ghost{color:var(--text);}
+  .btn-ghost:hover{background:var(--surface);border-color:var(--accent);}
+
+  /* ---------- Hero (poster style) ---------- */
+  .hero{
+    position:relative;z-index:1;
+    min-height:auto;
+    padding:20px 0 28px;
+    display:flex;flex-direction:column;
+    overflow:hidden;
+  }
+  .hero-topline{
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--text-dim);
+  }
+  .hero-stage{
+    position:relative;
+    flex:1;
+    min-height:380px;
+    display:flex;
+    align-items:flex-start;justify-content:center;
+    margin-top:0;
+    margin-bottom:-90px;
+  }
+  .hero-giant{
+    width:100%;
+    text-align:center;
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(4.2rem, 15vw, 11.5rem);
+    line-height:0.92;
+    letter-spacing:-0.01em;
+    color:var(--accent-soft);
+    opacity:0.9;
+    -webkit-text-stroke:1px rgba(230,214,255,0.35);
+    user-select:none;
+    position:relative;
+    z-index:1;
+  }
+  .hero-photo-glow{
+    position:absolute;
+    left:50%;top:0;
+    transform:translateX(-50%);
+    width:min(460px, 48vw);
+    height:clamp(440px, 58vh, 620px);
+    z-index:1;
+    background:radial-gradient(60% 55% at 50% 32%, rgba(168,85,247,0.45), transparent 72%);
+    filter:blur(70px);
+    pointer-events:none;
+  }
+  .hero-photo-wrap{
+    position:absolute;
+    left:50%;top:0;
+    transform:translateX(-50%);
+    width:min(460px, 48vw);
+    height:clamp(440px, 58vh, 620px);
+    z-index:2;
+    overflow:hidden;
+    -webkit-mask-image:linear-gradient(to bottom, black 70%, transparent 93%);
+            mask-image:linear-gradient(to bottom, black 70%, transparent 93%);
+    filter:drop-shadow(0 30px 40px rgba(15,10,25,0.45));
+  }
+  .hero-photo{
+    width:100%;height:100%;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+  }
+  .profile-image{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    object-position:top center;
+    display:block;
+  }
+  .hero-bio{
+    position:absolute;
+    right:0;top:34%;
+    max-width:190px;
+    list-style:none;
+    z-index:3;
+    text-align:left;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .hero-bio li{
+    font-size:0.86rem;
+    line-height:1.5;
+    color:var(--text-dim);
+    position:relative;
+    padding-left:14px;
+  }
+  .hero-bio li::before{
+    content:"";
+    position:absolute;left:0;top:0.55em;
+    width:6px;height:1px;
+    background:var(--accent);
+  }
+  .hero-bio li:first-child{color:var(--text);font-weight:500;}
+  .hero-decor{
+    position:absolute;
+    right:-6%;bottom:-10%;
+    width:420px;height:420px;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(168,85,247,0.24), transparent 55%),
+      radial-gradient(circle at 65% 60%, rgba(124,58,237,0.20), transparent 60%);
+    filter:blur(2px);
+    z-index:0;
+    pointer-events:none;
+  }
+  .hero-bottom{
+    position:relative;z-index:3;
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:24px;flex-wrap:wrap;
+    margin-top:0;
+  }
+  .hero-left{max-width:360px;}
+  .hero-tagline{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:clamp(1.3rem, 2.2vw, 1.7rem);
+    line-height:1.28;
+    color:var(--text);
+    margin-bottom:16px;
+  }
+  .hero-pill{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:10px 20px;border-radius:999px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    font-size:0.82rem;color:var(--text-dim);
+    margin-bottom:18px;
+    transition:all 0.25s;
+  }
+  .hero-pill:hover{border-color:var(--accent);color:var(--text);}
+  .hero-pill .dot{color:var(--accent);}
+  .hero-signature{
+    font-family:'Fraunces',serif;
+    font-style:italic;font-weight:500;
+    font-size:1.7rem;
+    color:var(--accent);
+  }
+  .hero-right{
+    text-align:right;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;letter-spacing:0.05em;
+    color:var(--text-dim);
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .hero-right .globe{color:var(--accent);}
+
+  @media (max-width:860px){
+    .hero{min-height:auto;padding-top:20px;}
+    .hero-giant{font-size:clamp(3rem,18vw,5rem);}
+    .hero-photo-wrap{position:relative;left:auto;top:auto;transform:none;width:100%;height:320px;margin-top:8px;}
+    .hero-photo-glow{display:none;}
+    .hero-bio{position:static;max-width:none;margin-top:14px;align-items:center;text-align:center;}
+    .hero-bio li{padding-left:0;}
+    .hero-bio li::before{display:none;}
+    .hero-bottom{flex-direction:column;align-items:flex-start;margin-top:18px;}
+    .hero-right{text-align:left;}
+  }
+
+  /* ---------- Section shared ---------- */
+  section{position:relative;z-index:1;padding:90px 0;}
+  .section-head{margin-bottom:52px;max-width:640px;}
+  .section-head h2{font-size:clamp(1.8rem,3vw,2.6rem);margin-top:12px;}
+  .divider{border-top:1px solid var(--line);}
+
+  /* ---------- About ---------- */
+  .about-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;
+  }
+  .about-text p{color:var(--text-dim);line-height:1.8;margin-bottom:18px;font-size:1rem;}
+  .about-text strong{color:var(--accent-soft);font-weight:600;}
+  .skills-list{display:flex;flex-direction:column;gap:14px;}
+  .skill-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 18px;
+    border:1px solid var(--line);border-radius:14px;
+    background:var(--surface);
+  }
+  .skill-row .name{font-weight:500;font-size:0.95rem;}
+  .skill-row .bar{width:120px;height:6px;background:var(--bg-soft);border-radius:99px;overflow:hidden;}
+  .skill-row .bar span{
+    display:block;height:100%;
+    background:linear-gradient(90deg, var(--accent-2), var(--accent));
+    border-radius:99px;
+  }
+
+  /* ---------- Work ---------- */
+  .filter-tabs{
+    display:flex;gap:10px;flex-wrap:wrap;margin-bottom:38px;
+  }
+  .filter-tab{
+    padding:9px 18px;border-radius:999px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--text-dim);
+    font-size:0.85rem;font-weight:500;
+    cursor:pointer;
+    transition:all 0.25s;
+  }
+  .filter-tab:hover{color:var(--text);border-color:var(--accent);}
+  .filter-tab.active{
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    color:#150a26;border-color:transparent;
+  }
+  .work-grid{
+    display:grid;grid-template-columns:repeat(auto-fit, minmax(260px,1fr));gap:26px;
+  }
+  .work-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--surface);
+    overflow:hidden;
+    transition:transform 0.3s, border-color 0.3s;
+    cursor:pointer;
+    display:flex;flex-direction:column;
+  }
+  .work-card:hover{transform:translateY(-6px);border-color:var(--accent);}
+  .work-card.hidden{display:none;}
+  .work-thumb{
+    height:340px;
+    background:linear-gradient(150deg, var(--surface-2), var(--bg-soft));
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .work-thumb img{
+    width:100%;height:100%;
+    object-fit:contain;
+    object-position:center;
+  }
+  .work-body{padding:20px 22px 24px;}
+  .work-body .eyebrow{margin-bottom:8px;display:block;}
+  .work-body h3{font-size:1.15rem;font-weight:500;margin-bottom:8px;}
+  .work-body p{color:var(--text-dim);font-size:0.88rem;line-height:1.6;}
+  .tap-hint{
+    font-family:'JetBrains Mono',monospace;font-size:0.7rem;
+    color:var(--accent);letter-spacing:0.05em;
+    margin-top:10px;display:flex;align-items:center;gap:6px;
+  }
+
+  /* ---------- Achievements card (distinct styling, full-width) ---------- */
+  .work-card.achievement-card{
+    grid-column:1 / -1;
+    flex-direction:row;
+    border:1px solid var(--gold-line);
+    background:linear-gradient(165deg, #2a2214, var(--surface));
+    position:relative;
+  }
+  .work-card.achievement-card:hover{border-color:var(--gold);}
+  .work-card.achievement-card::before{
+    content:"★";
+    position:absolute;
+    top:16px;right:16px;
+    width:34px;height:34px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--gold), var(--gold-2));
+    color:#2a1e00;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.9rem;
+    box-shadow:0 8px 18px rgba(0,0,0,0.4);
+    z-index:2;
+  }
+  .work-card.achievement-card .work-thumb{
+    width:360px;flex:none;height:auto;align-self:stretch;
+    background:linear-gradient(150deg, #33291a, var(--bg-soft));
+  }
+  .work-card.achievement-card .work-body{
+    flex:1;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:28px 34px;
+  }
+  .work-card.achievement-card .eyebrow{color:var(--gold);}
+  .work-card.achievement-card .tap-hint{color:var(--gold);}
+
+  @media (max-width:760px){
+    .work-card.achievement-card{flex-direction:column;}
+    .work-card.achievement-card .work-thumb{width:100%;height:260px;}
+  }
+
+  /* ---------- Gallery Modal ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:200;
+    background:rgba(10,5,20,0.88);
+    backdrop-filter:blur(10px);
+    display:none;
+    align-items:flex-start;justify-content:center;
+    padding:60px 24px;
+    overflow-y:auto;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    max-width:1000px;width:100%;
+    background:var(--bg-soft);
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:36px;
+    position:relative;
+  }
+  .modal-close{
+    position:absolute;top:20px;right:20px;
+    width:38px;height:38px;border-radius:50%;
+    background:var(--surface);border:1px solid var(--line);
+    color:var(--text);font-size:1.1rem;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:all 0.2s;
+  }
+  .modal-close:hover{background:var(--accent);color:#150a26;}
+  .modal-header{margin-bottom:28px;padding-right:50px;}
+  .modal-header h3{font-size:1.6rem;margin-top:6px;}
+  .modal-header p{color:var(--text-dim);margin-top:10px;font-size:0.92rem;line-height:1.6;max-width:640px;}
+  .modal-gallery{
+    display:grid;grid-template-columns:repeat(auto-fill, minmax(200px,1fr));gap:20px;
+  }
+  .modal-gallery figure{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    margin:0;
+  }
+  .modal-gallery img{width:100%;display:block;}
+  .modal-gallery figcaption{
+    padding:10px 14px;font-size:0.78rem;color:var(--text-dim);
+    border-top:1px solid var(--line);
+  }
+  @media (max-width:640px){
+    .modal-box{padding:24px;}
+    .modal-overlay{padding:20px 14px;}
+  }
+
+  /* ---------- Image Zoom Overlay ---------- */
+  .zoom-overlay{
+    position:fixed;inset:0;z-index:300;
+    background:rgba(5,2,10,0.94);
+    backdrop-filter:blur(6px);
+    display:none;
+    align-items:center;justify-content:center;
+    padding:40px;
+    cursor:zoom-out;
+  }
+  .zoom-overlay.open{display:flex;}
+  .zoom-overlay img{
+    max-width:100%;max-height:100%;
+    object-fit:contain;
+    border-radius:12px;
+    box-shadow:0 30px 80px rgba(0,0,0,0.5);
+    cursor:default;
+  }
+  .zoom-close{
+    position:fixed;top:24px;right:28px;
+    width:42px;height:42px;border-radius:50%;
+    background:var(--surface);border:1px solid var(--line);
+    color:var(--text);font-size:1.2rem;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:all 0.2s;
+    z-index:301;
+  }
+  .zoom-close:hover{background:var(--accent);color:#150a26;}
+  .modal-gallery img{cursor:zoom-in;transition:transform 0.25s;}
+  .modal-gallery img:hover{transform:scale(1.03);}
+
+  /* ---------- Contact ---------- */
+  .contact-wrap{
+    display:flex;justify-content:center;
+  }
+  .contact-card{
+    width:100%;max-width:560px;
+    padding:0;
+  }
+  .contact-info-row{
+    display:flex;gap:14px;flex-wrap:wrap;
+  }
+  .info-pill{
+    flex:1;min-width:180px;
+    display:flex;align-items:center;gap:12px;
+    padding:14px 16px;border-radius:14px;
+    background:var(--surface);border:1px solid var(--line);
+    font-size:0.92rem;
+  }
+  .contact-icon{
+    width:38px;height:38px;border-radius:10px;
+    background:var(--bg-soft);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1rem;
+    flex-shrink:0;
+  }
+  .info-pill .contact-icon{background:var(--surface-2);}
+  .contact-divider{
+    display:flex;align-items:center;gap:14px;
+    margin:32px 0 24px;
+    color:var(--text-faint);
+    font-family:'JetBrains Mono',monospace;font-size:0.7rem;
+    letter-spacing:0.1em;text-transform:uppercase;
+  }
+  .contact-divider::before, .contact-divider::after{
+    content:"";flex:1;height:1px;background:var(--line);
+  }
+  .icon-row{
+    display:flex;gap:22px;justify-content:center;
+  }
+  .icon-btn-wrap{
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+  }
+  .icon-btn{
+    width:52px;height:52px;border-radius:50%;
+    background:var(--bg-soft);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Inter',sans-serif;font-weight:700;font-size:1.1rem;
+    color:var(--accent);
+    transition:all 0.25s;
+  }
+  .icon-label{
+    font-size:0.76rem;color:var(--text-dim);
+    transition:color 0.25s;
+  }
+  .icon-btn-wrap:hover .icon-btn{
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    color:#150a26;
+    transform:translateY(-4px);
+    box-shadow:0 12px 26px rgba(0,0,0,0.4);
+  }
+  .icon-btn-wrap:hover .icon-label{color:var(--accent-soft);}
+
+  footer{
+    padding:36px 0;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;
+    color:var(--text-faint);font-size:0.85rem;flex-wrap:wrap;gap:10px;
+  }
+
+  @media (max-width:860px){
+    .about-grid{grid-template-columns:1fr;}
+    .work-grid{grid-template-columns:1fr;}
+    .nav-links{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="aurora"></div>
+<div class="grain"></div>
+<div class="glow-cursor" id="glow"></div>
+
+<header>
+  <nav>
+    <div class="logo"><span class="logo-mark">M</span>your.Ma-anne</div>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="https://www.linkedin.com/in/ma-anne-santander-194925367/" target="_blank" class="nav-linkedin" title="LinkedIn">in</a>
+    </div>
+    <a href="#contact" class="btn btn-primary">Hire Me</a>
+  </nav>
+</header>
+
+<section class="hero container">
+  <div class="hero-topline">
+    <span>UI/UX &amp; Web Designer</span>
+    <span>Ma-anne Santander Portfolio</span>
+  </div>
+
+  <div class="hero-stage">
+    <div class="hero-decor"></div>
+    <h1 class="hero-giant" aria-hidden="true">Portfolio</h1>
+    <div class="hero-photo-glow"></div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo">
+        <img src="images/profile.png" alt="Ma-anne" class="profile-image">
+      </div>
+    </div>
+    <ul class="hero-bio">
+      <li>Information Systems Student</li>
+      <li>UI/UX Designer</li>
+      <li>Web Developer</li>
+    </ul>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="hero-left">
+      <p class="hero-tagline">I design modern digital experiences that are clean, creative, and user-focused.</p>
+      <a href="#work" class="hero-pill">Available for Projects <span class="dot">✦</span></a>
+      <p class="hero-signature">Ma-anne</p>
+    </div>
+    <div class="hero-right">
+      <span>Based in Philippines</span>
+      <span>Available for International Remote Work <span class="globe">🌐</span></span>
+    </div>
+  </div>
+</section>
+
+<div class="divider container"></div>
+
+<section id="about" class="container">
+  <div class="section-head">
+    <span class="eyebrow">About</span>
+    <h2>Skills &amp; background</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>
+        I'm currently studying <strong>Bachelor of Science in Information System</strong>,
+        and I'm passionate about <strong>graphic design,and  UI/UX.</strong>. Most of my work starts as a personal or academic
+        project and turns into something I'm genuinely proud to share.
+      </p>
+      <p>
+        I enjoy the process of taking a rough idea and shaping it into
+        something organized, visually appealing, and easy to use — whether
+        that's a mobile app screen, a brand identity, or a short edit.
+      </p>
+      <p>
+        Outside of design, I'm comfortable with everyday office and data
+        tools like <strong>Word, Excel,</strong> and <strong>Google
+        Workspace</strong>, so I can fit into a team quickly.
+      </p>
+    </div>
+    <div class="skills-list">
+      <div class="skill-row"><span class="name">UI / UX Design</span><div class="bar"><span style="width:90%"></span></div></div>
+      <div class="skill-row"><span class="name">Graphic Design</span><div class="bar"><span style="width:88%"></span></div></div>
+      <div class="skill-row"><span class="name">Web / HTML Basics</span><div class="bar"><span style="width:65%"></span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider container"></div>
+
+<section id="work" class="container">
+  <div class="section-head">
+    <span class="eyebrow">Work</span>
+    <h2>Selected projects</h2>
+  </div>
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" data-filter="all">All</button>
+    <button class="filter-tab" data-filter="posters">Posters &amp; Brochures</button>
+    <button class="filter-tab" data-filter="uiux">UI / UX</button>
+    <button class="filter-tab" data-filter="website">Website</button>
+    <button class="filter-tab" data-filter="achievements">Achievements</button>
+  </div>
+  <div class="work-grid" id="workGrid">
+    <div class="work-card" data-category="posters" onclick="zoomImage('images/gender-roles-poster.png')">
+      <div class="work-thumb"><img src="images/gender-roles-poster.png" alt="Research poster design"></div>
+      <div class="work-body">
+        <span class="eyebrow">Poster Design</span>
+        <h3>Research Poster — Gender Roles in Computing</h3>
+        <p>Academic research poster layout with structured sections (Abstract, Introduction, Methodology, Results), custom color scheme, and data visualization.</p>
+        <div class="tap-hint">✦ Tap to enlarge</div>
+      </div>
+    </div>
+    <div class="work-card" data-category="posters" onclick="zoomImage('images/jobify-brochure-front.png')">
+      <div class="work-thumb"><img src="images/jobify-brochure-front.png" alt="Jobify brochure front panel"></div>
+      <div class="work-body">
+        <span class="eyebrow">Trifold Brochure</span>
+        <h3>Jobify — App Pitch Brochure</h3>
+        <p>Single-panel infographic introducing the Jobify app: problem, solution, purpose, and key mobile app features.</p>
+        <div class="tap-hint">✦ Tap to enlarge</div>
+      </div>
+    </div>
+    <div class="work-card" data-category="posters" onclick="openGallery('jobifytrifold')">
+      <div class="work-thumb"><img src="images/jobify-brochure-spread1.jpg" alt="Jobify trifold brochure front side"></div>
+      <div class="work-body">
+        <span class="eyebrow">Trifold Brochure</span>
+        <h3>Jobify — Trifold Brochure</h3>
+        <p>Full trifold layout: front side featuring the Jobify logo, Proveya company story, and team introduction, plus the back side breaking down core app features.</p>
+        <div class="tap-hint">✦ Tap to see the back</div>
+      </div>
+    </div>
+    <div class="work-card" data-category="uiux" onclick="openGallery('jobify')">
+      <div class="work-thumb"><img src="images/jobify-app-06-home.png" alt="Jobify mobile app home screen"></div>
+      <div class="work-body">
+        <span class="eyebrow">UI / UX Design</span>
+        <h3>Jobify — Mobile App UI</h3>
+        <p>Full mobile app flow: login, sign up, onboarding, free trial, safety reminders, home feed, and job detail screens.</p>
+        <div class="tap-hint">✦ Tap to view all 7 screens</div>
+      </div>
+    </div>
+    <div class="work-card" data-category="uiux" onclick="openGallery('ridelink')">
+      <div class="work-thumb"><img src="images/ridelink-05-dashboard.png" alt="RideLink attendance dashboard screen"></div>
+      <div class="work-body">
+        <span class="eyebrow">UI / UX Design</span>
+        <h3>RideLink — Membership App</h3>
+        <p>Tricycle association app: membership login, QR-based ID, approval flow, and a live queue/attendance dashboard.</p>
+        <div class="tap-hint">✦ Tap to view all 6 screens</div>
+      </div>
+    </div>
+    <div class="work-card" data-category="website" onclick="openGallery('panabook')">
+      <div class="work-thumb"><img src="images/panabook-02-home.png" alt="Panabook website home page"></div>
+      <div class="work-body">
+        <span class="eyebrow">Website Design</span>
+        <h3>Panabook — Library Website</h3>
+        <p>Online library site for Panabo City Library: guest login, genre browsing, library info, and FAQ pages.</p>
+        <div class="tap-hint">✦ Tap to view all 4 pages</div>
+      </div>
+    </div>
+    <div class="work-card achievement-card" data-category="achievements" onclick="openGallery('achievements')">
+      <div class="work-thumb"><img src="images/achievement-01-poster-award.png" alt="Certificate of Recognition for research poster"></div>
+      <div class="work-body">
+        <span class="eyebrow">School Achievements</span>
+        <h3>Certificates &amp; Recognition</h3>
+        <p>Certificate of Recognition for 2nd Place – Best Poster Design, an LGBTQ Representation informative brochure project design-champion, and a Cisco Cybersecurity Essentials certification.</p>
+        <div class="tap-hint">★ Tap to view all 3</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="galleryModal" onclick="if(event.target===this) closeGallery()">
+  <div class="modal-box">
+    <div class="modal-close" onclick="closeGallery()">✕</div>
+    <div class="modal-header">
+      <span class="eyebrow" id="modalEyebrow">UI / UX Design</span>
+      <h3 id="modalTitle">Project Title</h3>
+      <p id="modalDesc">Project description.</p>
+    </div>
+    <div class="modal-gallery" id="modalGallery"></div>
+  </div>
+</div>
+
+<div class="zoom-overlay" id="zoomOverlay" onclick="closeZoom()">
+  <div class="zoom-close" onclick="closeZoom()">✕</div>
+  <img id="zoomImg" src="" alt="Zoomed image">
+</div>
+
+<div class="divider container"></div>
+
+<section id="contact" class="container">
+  <div class="section-head">
+    <span class="eyebrow">Contact</span>
+    <h2>Let's work together</h2>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-card">
+      <div class="contact-info-row">
+        <div class="info-pill">
+          <div class="contact-icon">📞</div>
+          <div>0994 765 1922</div>
+        </div>
+        <div class="info-pill">
+          <div class="contact-icon">📍</div>
+          <div>Panabo City, Philippines</div>
+        </div>
+      </div>
+      <div class="contact-divider"><span>Reach me directly</span></div>
+      <div class="icon-row">
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ma-annesantander@gmail.com" target="_blank" class="icon-btn-wrap" title="Email">
+          <span class="icon-btn">✉️</span>
+          <span class="icon-label">Email</span>
+        </a>
+        <a href="https://www.linkedin.com/in/ma-anne-santander-194925367/" target="_blank" class="icon-btn-wrap" title="LinkedIn">
+          <span class="icon-btn">in</span>
+          <span class="icon-label">LinkedIn</span>
+        </a>
+        <a href="https://www.facebook.com/maanne.santander.98" target="_blank" class="icon-btn-wrap" title="Facebook">
+          <span class="icon-btn">f</span>
+          <span class="icon-label">Facebook</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="container">
+  <div>Designed &amp; built by <strong>Ma-anne</strong> · Graphic Designer · UI/UX</div>
+  <div>Panabo City, Philippines</div>
+</footer>
+
+<script>
+  const glow = document.getElementById('glow');
+  window.addEventListener('mousemove', (e) => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+  });
+  window.addEventListener('mouseleave', () => glow.style.opacity = '0');
+  window.addEventListener('mouseenter', () => glow.style.opacity = '1');
+
+  // Project galleries
+  const projectData = {
+    jobifytrifold: {
+      eyebrow: 'Trifold Brochure',
+      title: 'Jobify — Trifold Brochure (Front & Back)',
+      desc: 'Both sides of the printed trifold: the front with the Proveya company story, team, and download QR code, and the back with the how-it-works steps and core app features.',
+      images: [
+        { src: 'images/jobify-brochure-spread1.jpg', caption: 'Front — Company & Team' },
+        { src: 'images/jobify-brochure-spread2.jpg', caption: 'Back — How It Works & Features' }
+      ]
+    },
+    jobify: {
+      eyebrow: 'UI / UX Design',
+      title: 'Jobify — Mobile App UI',
+      desc: 'Complete UI flow for Jobify, a regional job-finder app: authentication, onboarding, safety guidelines, home dashboard, and job detail screens.',
+      images: [
+        { src: 'images/jobify-app-01-login.png', caption: 'Login' },
+        { src: 'images/jobify-app-02-signup.png', caption: 'Sign Up' },
+        { src: 'images/jobify-app-03-onboarding.png', caption: 'Onboarding' },
+        { src: 'images/jobify-app-04-freetrial.png', caption: 'Free Trial' },
+        { src: 'images/jobify-app-05-reminders.png', caption: 'Job Seeker Reminders' },
+        { src: 'images/jobify-app-06-home.png', caption: 'Home' },
+        { src: 'images/jobify-app-07-jobdetails.png', caption: 'Job Details' }
+      ]
+    },
+    ridelink: {
+      eyebrow: 'UI / UX Design',
+      title: 'RideLink — Membership & Queue App',
+      desc: 'UI flow for RideLink, a tricycle association membership and queue-tracking app: splash screen, login, membership approval, QR ID, live attendance dashboard, and member profile.',
+      images: [
+        { src: 'images/ridelink-01-splash.png', caption: 'Splash Screen' },
+        { src: 'images/ridelink-02-login.png', caption: 'Login' },
+        { src: 'images/ridelink-03-pending.png', caption: 'Membership Pending' },
+        { src: 'images/ridelink-04-qrid.png', caption: 'QR ID Generated' },
+        { src: 'images/ridelink-05-dashboard.png', caption: 'Attendance Dashboard' },
+        { src: 'images/ridelink-06-profile.png', caption: 'Member Profile & QR' }
+      ]
+    },
+    panabook: {
+      eyebrow: 'Website Design',
+      title: 'Panabook — Online Library Website',
+      desc: 'A browser-based library website built for Panabo City Library: guest login, personalized home with genre browsing, library info page, and an FAQ section.',
+      images: [
+        { src: 'images/panabook-01-login.png', caption: 'Guest Login' },
+        { src: 'images/panabook-02-home.png', caption: 'Home — Browse by Genre' },
+        { src: 'images/panabook-03-library.png', caption: 'Library Info' },
+        { src: 'images/panabook-04-faq.png', caption: 'FAQ' }
+      ]
+    },
+    achievements: {
+      eyebrow: 'School Achievements',
+      title: 'Certificates & Recognition',
+      desc: 'A few milestones from school: a Certificate of Recognition for 2nd Place – Best Poster Design, a printed LGBTQ Representation informative brochure, and a Cisco Networking Academy Cybersecurity Essentials certificate.',
+      images: [
+        { src: 'images/achievement-01-poster-award.png', caption: '2nd Place — Best Poster Design' },
+        { src: 'images/achievement-02-lgbtq-brochure.jpg', caption: 'LGBTQ Representation Brochure' },
+        { src: 'images/achievement-03-cisco-cert.png', caption: 'Cisco Cybersecurity Essentials' }
+      ]
+    }
+  };
+
+  function openGallery(key){
+    const data = projectData[key];
+    if(!data) return;
+    document.getElementById('modalEyebrow').textContent = data.eyebrow;
+    document.getElementById('modalTitle').textContent = data.title;
+    document.getElementById('modalDesc').textContent = data.desc;
+    const gallery = document.getElementById('modalGallery');
+    gallery.innerHTML = '';
+    data.images.forEach(img => {
+      const fig = document.createElement('figure');
+      fig.innerHTML = `<img src="${img.src}" alt="${img.caption}" onclick="event.stopPropagation(); zoomImage('${img.src}')"><figcaption>${img.caption}</figcaption>`;
+      gallery.appendChild(fig);
+    });
+    document.getElementById('galleryModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeGallery(){
+    document.getElementById('galleryModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function zoomImage(src){
+    document.getElementById('zoomImg').src = src;
+    document.getElementById('zoomOverlay').classList.add('open');
+  }
+
+  function closeZoom(){
+    document.getElementById('zoomOverlay').classList.remove('open');
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape'){
+      closeZoom();
+      closeGallery();
+    }
+  });
+
+  // Work filter tabs
+  const tabs = document.querySelectorAll('.filter-tab');
+  const cards = document.querySelectorAll('.work-card');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const filter = tab.dataset.filter;
+      cards.forEach(card => {
+        if (filter === 'all' || card.dataset.category === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
